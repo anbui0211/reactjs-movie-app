@@ -1,7 +1,7 @@
 function App() {
   return (
     <>
-      <p>Move App</p>
+      <p className="font-bold text-lg">Move App</p>
     </>
   );
 }
