@@ -12,7 +12,7 @@ const FeatureMovie = () => {
       method: "GET",
       headers: {
         accept: "application/json",
-        Authorization: "Bearer xxxx",
+        Authorization: `Bearer ${import.meta.env.VITE_READ_TOKEN_ACCESS_TMDB}`,
       },
     }).then(async (res) => {
       const data = await res.json();
@@ -22,7 +22,6 @@ const FeatureMovie = () => {
       setActiveMovieId(popularMovies[0].id);
     });
   }, []);
-  console.log(movies);
 
   return (
     <div className="relative text-white">

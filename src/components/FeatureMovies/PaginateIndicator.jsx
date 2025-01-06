@@ -21,7 +21,7 @@ const PaginateIndicator = ({ movies, activeMovieId, setActiveMovieId }) => {
 PaginateIndicator.propTypes = {
   movies: PropTypes.array,
   activeMovieId: PropTypes.number,
-  setActiveMovieId: PropTypes.number,
+  setActiveMovieId: PropTypes.func,
 };
 
 export default PaginateIndicator;
