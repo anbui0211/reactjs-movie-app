@@ -6,8 +6,6 @@ const MediaList = ({ title, tabs }) => {
   const [mediaList, setMediaList] = useState([]);
   const [activeTabId, setActiveTabId] = useState(tabs[0]?.id);
 
-  console.log(activeTabId);
-
   useEffect(() => {
     // https://api.themoviedb.org/3/trending/all/day?language=en-US
     const url = tabs.find((tab) => tab.id === activeTabId)?.url;
@@ -16,7 +14,7 @@ const MediaList = ({ title, tabs }) => {
         method: "GET",
         headers: {
           accept: "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_READ_TOKEN_ACCESS_TMDB}`,
+          Authorization: `Bearer ${import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN}`,
         },
       };
 
@@ -49,6 +47,7 @@ const MediaList = ({ title, tabs }) => {
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6 lg:gap-6">
         {mediaList.map((media) => (
           <MovieCard
+            id={media.id}
             key={media.id}
             // if category is TV, title and release_date will not exist
             title={media.title || media.name}
@@ -56,7 +55,6 @@ const MediaList = ({ title, tabs }) => {
             poster={media.poster_path}
             point={media.vote_average}
             // Nếu api không có media_type, thì media_type activeTabId (category)
-
             mediaType={media.media_type || activeTabId}
           />
         ))}
