@@ -1,10 +1,29 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import App from "./App.jsx";
+import HomePage from "./page/HomePage.jsx";
+import MovieDetail from "./page/MovieDetail.jsx";
+import RootLayout from "./page/RootLayout.jsx";
 
+const router = createBrowserRouter([
+  {
+    // Định nghĩa layout được sử dụng chung
+    element: <RootLayout />,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/movie/:id",
+        element: <MovieDetail />,
+      },
+    ],
+  },
+]);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </StrictMode>,
 );
