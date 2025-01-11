@@ -52,11 +52,7 @@ const Banner = ({ mediaInfo }) => {
                  * Biểu thức Math.round(undefined * 10) trả về NaN.
                  * => Need check exist và set default value here
                  */
-                percent={
-                  mediaInfo.vote_average
-                    ? Math.round(mediaInfo.vote_average * 10)
-                    : 0
-                }
+                percent={Math.round(mediaInfo.vote_average || 0 * 10)}
                 size={3.5}
                 strokeWidth={0.3}
               />

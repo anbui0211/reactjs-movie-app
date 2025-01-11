@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import MovieCard from "./MovieCard";
+import MovieCard from "@components/MovieCard";
 
 const MediaList = ({ title, tabs }) => {
   const [mediaList, setMediaList] = useState([]);
