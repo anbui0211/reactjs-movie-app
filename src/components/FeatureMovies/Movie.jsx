@@ -2,6 +2,7 @@ import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import PropTypes from "prop-types";
+import ImageComponent from "../ImageComponent";
 
 const Movie = (props) => {
   // destructuring assignment
@@ -11,7 +12,9 @@ const Movie = (props) => {
 
   return (
     <>
-      <img
+      <ImageComponent
+        width={900}
+        height={500}
         src={`https://image.tmdb.org/t/p/original${backdrop_path}`}
         className="aspect-video w-full brightness-50"
       />

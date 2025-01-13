@@ -1,79 +1,33 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Loading from "@components/Loading";
-import Banner from "@components/MediaDetail/Banner";
-import ActorList from "@components/MediaDetail/ActorList";
-import RelatedMediaList from "@/components/MediaDetail/RelatedMediaList";
 import MovieInformation from "@/components/MediaDetail/MovieInformation";
+import RelatedMediaList from "@/components/MediaDetail/RelatedMediaList";
+import useFetch from "@/hooks/useFetch";
+import Loading from "@components/Loading";
+import ActorList from "@components/MediaDetail/ActorList";
+import Banner from "@components/MediaDetail/Banner";
+import { useParams } from "react-router-dom";
 
 const MovieDetail = () => {
   const { id } = useParams();
-  const [movieInfo, setMovieInfo] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [relatedMovies, setRelatedMovies] = useState([]);
-  // const [isRelatedMovieListLoading, SetIsRelatedMovieListLoading] =
-  //   useState(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-
+  const { data: movieInfo, isLoading } = useFetch({
     /**
      * release_dates: get certification
      * credits: get diector movie
      */
-    const url = `https://api.themoviedb.org/3/movie/${id}?append_to_response=release_dates,credits`;
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN}`,
-      },
-    };
+    url: `/movie/${id}?append_to_response=release_dates,credits`,
+  });
 
-    fetch(url, options)
-      .then(async (res) => {
-        const data = await res.json();
-        setMovieInfo(data);
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [id]);
+  const { data: recommendationsResponse, isRelatedMovieLoading } = useFetch({
+    url: `/movie/${id}/recommendations`,
+  });
 
-  useEffect(() => {
-    // SetIsRelatedMovieListLoading(true);
-
-    const url = `https://api.themoviedb.org/3/movie/${id}/recommendations`;
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN}`,
-      },
-    };
-
-    fetch(url, options)
-      .then(async (res) => {
-        const data = await res.json();
-        const currentRelatedMovies = (data.results || []).slice(0, 8);
-        setRelatedMovies(currentRelatedMovies);
-        console.log({ data });
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-      .finally(() => {
-        // SetIsRelatedMovieListLoading(false);
-      });
-  }, [id]);
+  const relatedMovies = recommendationsResponse?.results || [];
 
   // If process get data is doing
   if (isLoading) {
     return <Loading />;
   }
+
+  console.log({ movieInfo, isLoading, relatedMovies });
 
   return (
     <div>
@@ -84,7 +38,10 @@ const MovieDetail = () => {
             {/* Thông tin tác giả */}
             <ActorList actors={movieInfo.credits?.cast || []} />0
             {/* Các phim liên quan */}
-            <RelatedMediaList mediaList={relatedMovies} />
+            <RelatedMediaList
+              mediaList={relatedMovies}
+              isLoading={isRelatedMovieLoading}
+            />
           </div>
           <div className="flex-1">
             <MovieInformation movieInfo={movieInfo} />
