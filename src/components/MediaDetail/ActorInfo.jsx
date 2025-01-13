@@ -1,10 +1,12 @@
 import PropType from "prop-types";
+import ImageComponent from "../ImageComponent";
 // eslint-disable-next-line no-unused-vars
 const ActorInfo = ({ id, name, character, profilePath }) => {
   return (
     <div className="rounded-lg border border-slate-300 shadow-sm">
-      <img
-        className="rounded-lg"
+      <ImageComponent
+        width={276}
+        height={350}
         src={
           profilePath
             ? `https://media.themoviedb.org/t/p/w276_and_h350_face${profilePath}`

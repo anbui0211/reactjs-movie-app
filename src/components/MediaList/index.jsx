@@ -1,30 +1,17 @@
-import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import useFetch from "@/hooks/useFetch";
 import MovieCard from "@components/MovieCard";
+import PropTypes from "prop-types";
+import { useState } from "react";
 
 const MediaList = ({ title, tabs }) => {
-  const [mediaList, setMediaList] = useState([]);
   const [activeTabId, setActiveTabId] = useState(tabs[0]?.id);
 
-  useEffect(() => {
-    // https://api.themoviedb.org/3/trending/all/day?language=en-US
-    const url = tabs.find((tab) => tab.id === activeTabId)?.url;
-    if (url) {
-      const options = {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN}`,
-        },
-      };
-
-      fetch(url, options).then(async (res) => {
-        const data = await res.json();
-        const trendingMediaList = data.results.slice(0, 12);
-        setMediaList(trendingMediaList);
-      });
-    }
-  }, [activeTabId, tabs]);
+  // /trending/all/day?language=en-US
+  const url = tabs.find((tab) => tab.id === activeTabId)?.url;
+  const { data } = useFetch({
+    url,
+  });
+  const mediaList = (data.results || []).slice(0, 12);
 
   return (
     <div className="bg-black px-8 py-10 text-[1.2vw] text-white">

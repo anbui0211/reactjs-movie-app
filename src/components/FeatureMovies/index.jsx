@@ -1,26 +1,21 @@
+import useFetch from "@/hooks/useFetch";
 import { useEffect, useState } from "react";
 import Movie from "./Movie";
 import PaginateIndicator from "./PaginateIndicator";
 
 const FeatureMovie = () => {
-  const [movies, setMovies] = useState([]);
   const [activeMovieId, setActiveMovieId] = useState();
+  const { data: popularMoviesResponse } = useFetch({
+    url: `/movie/popular`,
+  });
+
+  const movies = (popularMoviesResponse?.results || []).slice(0, 4); // select four movie
 
   useEffect(() => {
-    fetch("https://api.themoviedb.org/3/movie/popular", {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN}`,
-      },
-    }).then(async (res) => {
-      const data = await res.json();
-      const popularMovies = data.results.slice(0, 4); // select four movie
-
-      setMovies(popularMovies);
-      setActiveMovieId(popularMovies[0].id);
-    });
-  }, []);
+    if (movies[0]?.id) {
+      setActiveMovieId(movies[0].id);
+    }
+  }, [JSON.stringify(movies)]);
 
   return (
     <div className="relative text-white">

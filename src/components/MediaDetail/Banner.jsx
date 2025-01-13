@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { groupBy } from "lodash";
 import PropTypes from "prop-types";
 import CircularProgressBar from "../CircularProgressBar";
+import ImageComponent from "../ImageComponent";
 
 const Banner = ({ mediaInfo }) => {
   const certification = (
@@ -29,7 +30,9 @@ const Banner = ({ mediaInfo }) => {
       />
       <div className="relative mx-auto flex max-w-screen-xl gap-6 px-6 py-10 lg:gap-8">
         <div className="flex-1">
-          <img
+          <ImageComponent
+            width={600}
+            height={900}
             src={`https://image.tmdb.org/t/p/w342/${mediaInfo.poster_path}`}
           />
         </div>
