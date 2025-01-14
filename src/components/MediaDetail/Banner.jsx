@@ -5,19 +5,17 @@ import PropTypes from "prop-types";
 import CircularProgressBar from "../CircularProgressBar";
 import ImageComponent from "../ImageComponent";
 
-const Banner = ({ mediaInfo }) => {
-  const certification = (
-    (mediaInfo.release_dates?.results || []).find(
-      (result) => result.iso_3166_1 === "US",
-    )?.release_dates || []
-  ).find((release_date) => release_date.certification)?.certification;
-
-  const genres = (mediaInfo.genres || []).map((genre) => genre.name).join(", ");
-
-  const crews = (mediaInfo.credits?.crew || [])
-    .filter((crew) => ["Director", "Screenplay", "Writer"].includes(crew.job))
-    .map((crew) => ({ id: crew.id, job: crew.job, name: crew.name }));
-
+const Banner = ({
+  title,
+  backdropPath,
+  posterPath,
+  certification,
+  crews,
+  genres,
+  releaseDate,
+  point = 0,
+  overview,
+}) => {
   // select Director, Screenplay, Writer
   const groupCrews = groupBy(crews, "job");
 
@@ -25,24 +23,27 @@ const Banner = ({ mediaInfo }) => {
     <div className="relative overflow-hidden text-white">
       <img
         // inset-0 ->(top:0; left-0; right-0; bottom-0;)
-        className="absolute inset-0 brightness-[0.2]"
-        src={`https://image.tmdb.org/t/p/original${mediaInfo.backdrop_path}`}
+        className="absolute inset-0 aspect-video w-full brightness-[0.2]"
+        src={`https://image.tmdb.org/t/p/original${backdropPath}`}
       />
       <div className="relative mx-auto flex max-w-screen-xl gap-6 px-6 py-10 lg:gap-8">
         <div className="flex-1">
           <ImageComponent
             width={600}
             height={900}
-            src={`https://image.tmdb.org/t/p/w342/${mediaInfo.poster_path}`}
+            src={`https://image.tmdb.org/t/p/w342/${posterPath}`}
           />
         </div>
         <div className="flex-[2] text-[1.2vw]">
-          <p className="mb-2 text-[2vw] font-bold">{mediaInfo.title}</p>
+          <p className="mb-2 text-[2vw] font-bold">
+            {/* TVShow no have "title" filed, so we use name */}
+            {title}
+          </p>
           <div className="flex items-center gap-4">
             <span className="border border-gray-400 p-1 text-gray-400">
               {certification}
             </span>
-            <p>{mediaInfo.release_date}</p>
+            <p>{releaseDate}</p>
             <p>{genres}</p>
           </div>
           <div className="mt-4 flex items-center gap-4">
@@ -55,7 +56,7 @@ const Banner = ({ mediaInfo }) => {
                  * Biểu thức Math.round(undefined * 10) trả về NaN.
                  * => Need check exist và set default value here
                  */
-                percent={Math.round(mediaInfo.vote_average || 0 * 10)}
+                percent={Math.round(point || 0 * 10)}
                 size={3.5}
                 strokeWidth={0.3}
               />
@@ -68,7 +69,7 @@ const Banner = ({ mediaInfo }) => {
           </div>
           <div className="mt-4">
             <p className="mb-1 text-[1.3vw] font-bold">Overview</p>
-            <p>{mediaInfo.overview}</p>
+            <p>{overview}</p>
           </div>
           <div className="mt-4 grid grid-cols-2 gap-2">
             {Object.keys(groupCrews).map((job) => (
@@ -85,7 +86,15 @@ const Banner = ({ mediaInfo }) => {
 };
 
 Banner.propTypes = {
-  mediaInfo: PropTypes.object,
+  title: PropTypes.string,
+  backdropPath: PropTypes.string,
+  posterPath: PropTypes.string,
+  certification: PropTypes.string,
+  crews: PropTypes.array,
+  genres: PropTypes.string,
+  releaseDate: PropTypes.string,
+  point: PropTypes.number,
+  overview: PropTypes.string,
 };
 
 export default Banner;
