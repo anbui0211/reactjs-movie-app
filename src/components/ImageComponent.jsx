@@ -6,10 +6,16 @@ const ImageComponent = ({ src, width, height, className }) => {
   );
   useEffect(() => {
     const img = new Image();
-    img.src = src;
-    img.onload = () => {
-      setCurrentSrc(src);
-    };
+    if (src) {
+      img.src = src;
+      img.onload = () => {
+        setCurrentSrc(src);
+      };
+      return;
+    }
+
+    // "src" prop no have value
+    setCurrentSrc(`https://placehold.co/${width}x${height}?text="No%20Image"`);
 
     /** Clean up function
      * Clean up khi component unmount or src change
@@ -17,14 +23,14 @@ const ImageComponent = ({ src, width, height, className }) => {
     return () => {
       img.onload = null;
     };
-  }, [src]);
+  }, [src, width, height]);
 
   return (
     <img
       className={currentSrc === src ? className : `${className} blur-sm`}
       src={currentSrc}
-      width={210}
-      height={300}
+      width={width}
+      height={height}
     />
   );
 };

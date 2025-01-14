@@ -20,9 +20,11 @@ const Banner = ({
   const groupCrews = groupBy(crews, "job");
 
   return (
-    <div className="relative overflow-hidden text-white">
+    <div className="relative overflow-hidden bg-black text-white">
       <img
         // inset-0 ->(top:0; left-0; right-0; bottom-0;)
+        width={1200}
+        height={800}
         className="absolute inset-0 aspect-video w-full brightness-[0.2]"
         src={`https://image.tmdb.org/t/p/original${backdropPath}`}
       />
