@@ -16,22 +16,42 @@ const MovieDetail = () => {
     url: `/movie/${id}?append_to_response=release_dates,credits`,
   });
 
-  const { data: recommendationsResponse, isRelatedMovieLoading } = useFetch({
+  const { data: recommendationsResponse, isRecommendedTVLoading } = useFetch({
     url: `/movie/${id}/recommendations`,
   });
 
-  const relatedMovies = recommendationsResponse?.results || [];
+  const relatedTVShow = recommendationsResponse?.results || [];
+
+  const certification = (
+    (movieInfo.release_dates?.results || []).find(
+      (result) => result.iso_3166_1 === "US",
+    )?.release_dates || []
+  ).find((release_date) => release_date.certification)?.certification;
+
+  const genres = (movieInfo.genres || []).map((genre) => genre.name).join(", ");
+
+  const crews = (movieInfo.credits?.crew || [])
+    .filter((crew) => ["Director", "Screenplay", "Writer"].includes(crew.job))
+    .map((crew) => ({ id: crew.id, job: crew.job, name: crew.name }));
 
   // If process get data is doing
   if (isLoading) {
     return <Loading />;
   }
 
-  console.log({ movieInfo, isLoading, relatedMovies });
-
   return (
     <div>
-      <Banner mediaInfo={movieInfo} />
+      <Banner
+        title={movieInfo.title}
+        backdropPath={movieInfo.backdrop_path}
+        posterPath={movieInfo.poster_path}
+        releaseDate={movieInfo.release_date}
+        genres={genres}
+        point={movieInfo.vote_average}
+        overview={movieInfo.overview}
+        certification={certification}
+        crews={crews}
+      />
       <div className="bg-black text-[1.2vw] text-white">
         <div className="mx-auto flex max-w-screen-xl gap-6 px-6 py-10 sm:gap-8">
           <div className="flex-[2]">
@@ -39,8 +59,8 @@ const MovieDetail = () => {
             <ActorList actors={movieInfo.credits?.cast || []} />0
             {/* Các phim liên quan */}
             <RelatedMediaList
-              mediaList={relatedMovies}
-              isLoading={isRelatedMovieLoading}
+              mediaList={relatedTVShow}
+              isLoading={isRecommendedTVLoading}
             />
           </div>
           <div className="flex-1">

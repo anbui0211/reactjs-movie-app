@@ -1,7 +1,7 @@
 import PropType from "prop-types";
 import ImageComponent from "../ImageComponent";
 // eslint-disable-next-line no-unused-vars
-const ActorInfo = ({ id, name, character, profilePath }) => {
+const ActorInfo = ({ id, name, character, profilePath, episodeCount }) => {
   return (
     <div className="rounded-lg border border-slate-300 shadow-sm">
       <ImageComponent
@@ -16,7 +16,7 @@ const ActorInfo = ({ id, name, character, profilePath }) => {
       <div className="p-3">
         <p className="font-bold">{name}</p>
         <p>{character}</p>
-        <p>18</p>
+        <p>{episodeCount > 1 ? `${episodeCount} Episodes` : `Episode`} </p>
       </div>
     </div>
   );
@@ -27,6 +27,7 @@ ActorInfo.propTypes = {
   name: PropType.string,
   character: PropType.string,
   profilePath: PropType.string,
+  episodeCount: PropType.number,
 };
 
 export default ActorInfo;
