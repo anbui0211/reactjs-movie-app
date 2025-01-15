@@ -1,4 +1,5 @@
 import RelatedMediaList from "@/components/MediaDetail/RelatedMediaList";
+import SessonsList from "@/components/MediaDetail/SessonsList";
 import TVShowInformation from "@/components/MediaDetail/TVShowInformation";
 import useFetch from "@/hooks/useFetch";
 import Loading from "@components/Loading";
@@ -42,6 +43,8 @@ const TVShowDetail = () => {
     episodeCount: cast.roles[0]?.episode_count,
   }));
 
+  const seasonsSorted = (tvInfo.seasons || []).reverse();
+
   // If process get data is doing
   if (isLoading) {
     return <Loading />;
@@ -66,7 +69,10 @@ const TVShowDetail = () => {
         <div className="mx-auto flex max-w-screen-xl gap-6 px-6 py-10 sm:gap-8">
           <div className="flex-[2]">
             {/* Thông tin tác giả */}
-            <ActorList actors={actors} />0{/* Các phim liên quan */}
+            <ActorList actors={actors} />
+            {/* Seri và tập phim */}
+            <SessonsList sessons={seasonsSorted} />
+            {/* Các phim liên quan */}
             <RelatedMediaList
               mediaList={relatedMovies}
               isLoading={isRelatedMovieLoading}
