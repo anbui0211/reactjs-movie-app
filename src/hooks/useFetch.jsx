@@ -4,31 +4,40 @@ const DEFAULT_HEADER = {
   accept: "application/json",
   Authorization: `Bearer ${import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN}`,
 };
-export default function useFetch({ url = "", method = "GET", headers = {} }) {
+
+/**
+ * enable: quyết định khi nào mới thực hiện việc gọi API
+ */
+export default function useFetch(
+  { url = "", method = "GET", headers = {} },
+  { enabled } = { enabled: true },
+) {
   const [data, setData] = useState({});
   const [isLoadding, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
+    if (enabled) {
+      setIsLoading(true);
 
-    fetch(`${import.meta.env.VITE_API_HOST}${url}`, {
-      method: method,
-      headers: {
-        ...DEFAULT_HEADER,
-        ...headers,
-      },
-    })
-      .then(async (res) => {
-        const data = await res.json();
-        setData(data);
-        // console.log({ data });
+      fetch(`${import.meta.env.VITE_API_HOST}${url}`, {
+        method: method,
+        headers: {
+          ...DEFAULT_HEADER,
+          ...headers,
+        },
       })
-      .catch((err) => {
-        console.error(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+        .then(async (res) => {
+          const data = await res.json();
+          setData(data);
+          // console.log({ data });
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
 
     // Back to top
     // window.scrollTo({ top: 0, behavior: "smooth" });

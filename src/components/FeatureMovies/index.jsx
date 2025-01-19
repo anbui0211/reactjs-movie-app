@@ -6,11 +6,20 @@ import PaginateIndicator from "./PaginateIndicator";
 const FeatureMovie = () => {
   const [activeMovieId, setActiveMovieId] = useState();
   const { data: popularMoviesResponse } = useFetch({
-    url: `/movie/popular`,
+    url: `/discover/movie?include_adult=false&language=en-US&page=1&sort_by=popularity.desc&include_video=true`,
   });
 
-  const movies = (popularMoviesResponse?.results || []).slice(0, 4); // select four movie
+  const { data: videoResponse } = useFetch(
+    {
+      url: `/movie/${activeMovieId}/videos`,
+    },
+    { enabled: !!activeMovieId }, // !!: convert to boolean
+  );
+  const trailerVideoKey = (videoResponse?.results || []).find(
+    (video) => video.type === "Trailer" && video.site === "YouTube",
+  )?.key;
 
+  const movies = (popularMoviesResponse?.results || []).slice(0, 4); // select four movie
   useEffect(() => {
     if (movies[0]?.id) {
       setActiveMovieId(movies[0].id);
@@ -22,7 +31,11 @@ const FeatureMovie = () => {
       {movies
         .filter((movie) => movie.id == activeMovieId)
         .map((movie) => (
-          <Movie data={movie} key={movie.id} />
+          <Movie
+            data={movie}
+            key={movie.id}
+            trailerVideoKey={trailerVideoKey}
+          />
         ))}
       <PaginateIndicator
         movies={movies}

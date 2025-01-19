@@ -4,6 +4,7 @@ import { groupBy } from "lodash";
 import PropTypes from "prop-types";
 import CircularProgressBar from "../CircularProgressBar";
 import ImageComponent from "../ImageComponent";
+import { useModalContext } from "@/context/ModalProvider";
 
 const Banner = ({
   title,
@@ -15,9 +16,11 @@ const Banner = ({
   releaseDate,
   point = 0,
   overview,
+  trailerVideoKey,
 }) => {
   // select Director, Screenplay, Writer
   const groupCrews = groupBy(crews, "job");
+  const { openPopup } = useModalContext();
 
   return (
     <div className="relative overflow-hidden bg-black text-white">
@@ -64,7 +67,19 @@ const Banner = ({
               />
               Ratings
             </div>
-            <button>
+            <button
+              onClick={() => {
+                openPopup(
+                  <iframe
+                    src={`https://www.youtube.com/embed/${trailerVideoKey}`}
+                    title="Trailer"
+                    className="aspect-video w-[50vw]"
+                  >
+                    Trailer
+                  </iframe>,
+                );
+              }}
+            >
               <FontAwesomeIcon icon={faPlay} className="mr-1" />
               Trailer
             </button>
@@ -97,6 +112,7 @@ Banner.propTypes = {
   releaseDate: PropTypes.string,
   point: PropTypes.number,
   overview: PropTypes.string,
+  trailerVideoKey: PropTypes.string,
 };
 
 export default Banner;
