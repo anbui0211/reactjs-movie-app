@@ -3,12 +3,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import PropTypes from "prop-types";
 import ImageComponent from "../ImageComponent";
+import { useModalContext } from "@/context/ModalProvider";
+import { Link } from "react-router-dom";
 
 const Movie = (props) => {
   // destructuring assignment
   const {
-    data: { backdrop_path, title, release_date, overview },
+    data: { id, backdrop_path, title, release_date, overview },
+    trailerVideoKey,
   } = props;
+
+  const { openPopup } = useModalContext();
 
   return (
     <>
@@ -32,12 +37,28 @@ const Movie = (props) => {
             <p>{overview}</p>
           </div>
           <div className="mt-4">
-            <button className="mr-2 rounded bg-white px-4 py-2 text-10 text-black lg:text-lg">
+            <button
+              onClick={() => {
+                openPopup(
+                  <iframe
+                    src={`https://www.youtube.com/embed/${trailerVideoKey}`}
+                    title="Trailer"
+                    className="aspect-video w-[50vw]"
+                  >
+                    Trailer
+                  </iframe>,
+                );
+              }}
+              className="mr-2 rounded bg-white px-4 py-2 text-10 text-black lg:text-lg"
+            >
               <FontAwesomeIcon icon={faPlay} /> Trailer
             </button>
-            <button className="rounded bg-slate-300/35 px-4 py-2 text-10 lg:text-lg">
-              View Detail
-            </button>
+
+            <Link to={`/movie/${id}`}>
+              <button className="rounded bg-slate-300/35 px-4 py-2 text-10 lg:text-lg">
+                View Detail
+              </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -46,13 +67,14 @@ const Movie = (props) => {
 };
 
 Movie.propTypes = {
-  props: PropTypes.object,
   data: PropTypes.shape({
+    id: PropTypes.number,
     backdrop_path: PropTypes.string,
     title: PropTypes.string,
     release_date: PropTypes.string,
     overview: PropTypes.string,
   }),
+  trailerVideoKey: PropTypes.string,
 };
 
 export default Movie;
