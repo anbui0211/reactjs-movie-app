@@ -16,7 +16,10 @@ const SessonsList = ({ sessons = [] }) => {
               width={130}
               height={195}
               className="w-1/4 rounded-lg"
-              src={`https://media.themoviedb.org/t/p/w300${sesson.poster_path}`}
+              src={
+                sesson.poster_path &&
+                `https://media.themoviedb.org/t/p/w300${sesson.poster_path}`
+              }
             />
             {/* space-y: set khoảng cách giữa các item (ngoại trừ item đầu tiên) */}
             <div className="space-y-1">

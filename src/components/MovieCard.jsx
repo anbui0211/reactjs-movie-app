@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import CircularProgressBar from "./CircularProgressBar";
 import PropTypes from "prop-types";
-import Image from "./ImageComponent";
+import ImageComponent from "./ImageComponent";
 
 const MovieCard = ({ id, title, releaseDate, poster, point, mediaType }) => {
   return (
@@ -16,8 +16,8 @@ const MovieCard = ({ id, title, releaseDate, poster, point, mediaType }) => {
           </p>
         )}
 
-        <Image
-          src={`https://media.themoviedb.org/t/p/w500${poster}`}
+        <ImageComponent
+          src={poster && `https://media.themoviedb.org/t/p/w500${poster}`}
           width={210}
           height={300}
           className="w-full rounded-lg"
