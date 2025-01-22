@@ -1,10 +1,10 @@
 import PropType from "prop-types";
 import MovieCard from "@components/MovieCard";
 import Loading from "../Loading";
-const RelatedMediaList = ({ mediaList = [], isLoading }) => {
+const RelatedMediaList = ({ mediaList = [], isLoading, title }) => {
   return (
     <div>
-      <p className="mb-4 mt-6 text-[1.4vw] font-bold">More like this</p>
+      <p className="mb-4 mt-6 text-[1.4vw] font-bold">{title}</p>
       {isLoading ? (
         <Loading />
       ) : (
@@ -29,6 +29,7 @@ const RelatedMediaList = ({ mediaList = [], isLoading }) => {
 RelatedMediaList.propTypes = {
   mediaList: PropType.array,
   isLoading: PropType.bool,
+  title: PropType.string,
 };
 
 export default RelatedMediaList;

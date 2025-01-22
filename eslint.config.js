@@ -33,6 +33,8 @@ export default [
         "warn",
         { allowConstantExport: true },
       ],
+      // eslint-disable-next-line no-dupe-keys
+      "react-refresh/only-export-components": "off",
       // Turn off validation props
       // "react-prop-types": "off",
     },
