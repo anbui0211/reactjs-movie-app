@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ModalProvider from "./context/ModalProvider";
 import "./index.css";
 import RootLayout from "./pages/RootLayout.jsx";
+import SearchPage from "./pages/SearchPage";
 
 // lazy import
 const MovieDetail = lazy(() => import("./pages/MovieDetail"));
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
         element: <TvShowDetail />,
       },
       {
+        path: "/search",
+        element: <SearchPage />,
+      },
+      {
         path: "/people/:id",
         element: <PeoplePage />,
         loader: async ({ params }) => {
@@ -46,6 +51,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+
 ]);
 createRoot(document.getElementById("root")).render(
   <ModalProvider>
